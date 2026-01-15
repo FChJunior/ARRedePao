@@ -51,7 +51,6 @@ contentGroup.add(ground);
 // Modelo 3D
 // =======================
 const loader = new GLTFLoader();
-const clock = new THREE.Clock();
 let mixer;
 
 loader.load(
@@ -103,7 +102,6 @@ const smoothingFactor = 0.15; // quanto menor, mais suave
 await mindarThree.start();
 
 renderer.setAnimationLoop(() => {
-  const delta = clock.getDelta();
 
   if (mixer) mixer.update(delta);
 
