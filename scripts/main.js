@@ -36,20 +36,6 @@ const contentGroup = new THREE.Group();
 anchor.group.add(contentGroup);
 
 // =======================
-// Chão
-// =======================
-const groundGeometry = new THREE.BoxGeometry(1, 0.1, 1);
-const groundMaterial = new THREE.MeshStandardMaterial({
-  color: 0x8B4513,
-  roughness: 0.7,
-  metalness: 0.2,
-});
-const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-ground.position.set(0, -0.2, 0);
-ground.rotation.x = 0.9;
-contentGroup.add(ground);
-
-// =======================
 // Modelo 3D
 // =======================
 const loader = new GLTFLoader();
