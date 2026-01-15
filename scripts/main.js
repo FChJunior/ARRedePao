@@ -53,6 +53,8 @@ contentGroup.add(ground);
 const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 let mixer;
+let animationActions = [];
+let animationClip; // 🎬 Guarda o clip para detectar loop
 
 loader.load(
   "./assets/masterAnimationPadeirinho.glb",
@@ -70,7 +72,21 @@ loader.load(
     if (gltf.animations.length > 0) {
       mixer = new THREE.AnimationMixer(model);
       gltf.animations.forEach((clip) => {
-        mixer.clipAction(clip).play();
+        animationClip = clip; // Guarda referência do clip
+        const action = mixer.clipAction(clip);
+        action.play();
+        action.paused = true; // 🎬 Começa pausado
+        animationActions.push(action);
+      });
+
+      // 🔁 Escuta quando animação faz loop
+      mixer.addEventListener("loop", () => {
+        console.log("🔁 Animação fez loop");
+        // Reinicia áudio do início
+        audio.currentTime = 0;
+        audio.play().catch((err) => {
+          console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
+        });
       });
     }
 
@@ -83,14 +99,38 @@ loader.load(
 );
 
 // =======================
+// Áudio
+// =======================
+const audio = new Audio("./audios/paderin.mp3");
+audio.loop = false; // ❌ Sem loop no áudio
+
+// =======================
 // Debug de target
 // =======================
 anchor.onTargetFound = () => {
   console.log("🎯 Target encontrado");
+
+  // ▶️ Resume animação
+  animationActions.forEach((action) => {
+    action.paused = false;
+  });
+
+  // ▶️ Toca áudio
+  audio.play().catch((err) => {
+    console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
+  });
 };
 
 anchor.onTargetLost = () => {
   console.log("❌ Target perdido");
+
+  // ⏸️ Pausa animação
+  animationActions.forEach((action) => {
+    action.paused = true;
+  });
+
+  // ⏸️ Pausa áudio
+  audio.pause();
 };
 
 // =======================
