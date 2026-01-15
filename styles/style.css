@@ -6,14 +6,14 @@ html, body {
   overflow: hidden;
   background: transparent;
 }
-/* 
+
 #ar-container {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-/* garante que o vídeo fique visível 
+/*garante que o vídeo fique visível */
 #ar-container video {
   position: absolute;
   top: 0;
@@ -24,72 +24,11 @@ html, body {
   z-index: 0;
 }
 
-/* canvas do Three.js 
+/*canvas do Three.js */
 #ar-container canvas {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1;
-} */
+} 
 
-#ui {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-
-  bottom: env(safe-area-inset-bottom, 20px);
-
-  display: none;
-  flex-direction: column;
-  gap: 14px;
-
-  background: linear-gradient(145deg, #b30000, #e60000);
-  border: 3px solid #ffd700;
-  border-radius: 18px;
-
-  padding: 16px;
-  width: min(90vw, 320px);
-
-  color: #fff;
-  text-align: center;
-
-  z-index: 10;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-}
-
-/* Título */
-#ui h2 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-/* Botão grande para toque */
-button {
-  min-height: 48px;
-  font-size: 1rem;
-  font-weight: 600;
-
-  background: linear-gradient(145deg, #1f7a1f, #2ecc71);
-  border: none;
-  border-radius: 14px;
-
-  color: #fff;
-  cursor: pointer;
-
-  touch-action: manipulation;
-}
-
-/* Sliders */
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.9rem;
-}
-
-input[type="range"] {
-  width: 100%;
-  height: 32px;
-  accent-color: #ffd700;
-  touch-action: pan-x;
-}
