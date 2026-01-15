@@ -11,7 +11,7 @@ document.body.style.height = "100%";
 // =======================
 const mindarThree = new MindARThree({
   container: document.body,
-  imageTargetSrc: "../target/targets.mind",
+  imageTargetSrc: "./target/targets.mind",
 });
 
 const { renderer, scene, camera } = mindarThree;
@@ -55,7 +55,7 @@ const clock = new THREE.Clock();
 let mixer;
 
 loader.load(
-  "../assets/masterAnimationPadeirinho.glb",
+  "./assets/masterAnimationPadeirinho.glb",
   (gltf) => {
     const model = gltf.scene;
     model.scale.set(4, 4, 4);
