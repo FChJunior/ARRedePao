@@ -5,6 +5,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: transparent;
+  position: relative;
 }
 
 #ar-container {
@@ -34,31 +35,35 @@ html, body {
 
 /* Botão de iniciar AR */
 #start-button {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  padding: 20px 40px;
-  font-size: 18px;
+  padding: 12px 24px;
+  font-size: 14px;
   font-weight: bold;
   color: white;
-  background: blue;
+  background: #2563eb;
   border: none;
-  border-radius: 50px;
+  border-radius: 25px;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   font-family: Arial, sans-serif;
+  max-width: 80%;
+  white-space: nowrap;
 }
 
 #start-button:hover {
   transform: translate(-50%, -50%) scale(1.05);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: #1d4ed8;
 }
 
 #start-button:active {
   transform: translate(-50%, -50%) scale(0.95);
+  background: #1e40af;
 }
 
 #start-button.hidden {
