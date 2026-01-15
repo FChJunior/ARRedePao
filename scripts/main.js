@@ -11,7 +11,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 // =======================
 const mindarThree = new MindARThree({
   container: document.body,
-  imageTargetSrc: "../target/targets.mind",
+  imageTargetSrc: "./target/targets.mind",
 });
 
 const { renderer, scene, camera } = mindarThree;
@@ -51,10 +51,11 @@ contentGroup.add(ground);
 // Modelo 3D
 // =======================
 const loader = new GLTFLoader();
+const clock = new THREE.Clock();
 let mixer;
 
 loader.load(
-  "../assets/masterAnimationPadeirinho.glb",
+  "./assets/masterAnimationPadeirinho.glb",
   (gltf) => {
     const model = gltf.scene;
     model.scale.set(4, 4, 4);
@@ -102,6 +103,7 @@ const smoothingFactor = 0.15; // quanto menor, mais suave
 await mindarThree.start();
 
 renderer.setAnimationLoop(() => {
+  const delta = clock.getDelta();
 
   if (mixer) mixer.update(delta);
 
