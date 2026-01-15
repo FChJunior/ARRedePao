@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { MindARThree } from "mindar-image-three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-document.body.style.margin = "0";
-document.body.style.width = "100%";
-document.body.style.height = "100%";
+// document.body.style.margin = "0";
+// document.body.style.width = "100%";
+// document.body.style.height = "100%";
 
 // =======================
 // MindAR setup
@@ -51,7 +51,6 @@ contentGroup.add(ground);
 // Modelo 3D
 // =======================
 const loader = new GLTFLoader();
-const clock = new THREE.Clock();
 let mixer;
 
 loader.load(
@@ -103,7 +102,6 @@ const smoothingFactor = 0.15; // quanto menor, mais suave
 await mindarThree.start();
 
 renderer.setAnimationLoop(() => {
-  const delta = clock.getDelta();
 
   if (mixer) mixer.update(delta);
 
