@@ -2,9 +2,11 @@ import * as THREE from "three";
 import { MindARThree } from "mindar-image-three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-// document.body.style.margin = "0";
-// document.body.style.width = "100%";
-// document.body.style.height = "100%";
+// =======================
+// Botão de iniciar (iOS compatibility)
+// =======================
+const startButton = document.getElementById("start-button");
+let arStarted = false;
 
 // =======================
 // MindAR setup
@@ -115,10 +117,12 @@ anchor.onTargetFound = () => {
     action.paused = false;
   });
 
-  // ▶️ Toca áudio
-  audio.play().catch((err) => {
-    console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
-  });
+  // ▶️ Toca áudio (só se AR já foi iniciado)
+  if (arStarted) {
+    audio.play().catch((err) => {
+      console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
+    });
+  }
 };
 
 anchor.onTargetLost = () => {
@@ -134,26 +138,48 @@ anchor.onTargetLost = () => {
 };
 
 // =======================
+// Botão iniciar AR
+// =======================
+startButton.addEventListener("click", async () => {
+  try {
+    // 🔓 Desbloqueia áudio (importante para iOS)
+    await audio.play();
+    audio.pause();
+    audio.currentTime = 0;
+
+    // 🚀 Inicia o MindAR
+    await mindarThree.start();
+    arStarted = true;
+
+    // 🎬 Inicia o loop de renderização
+    renderer.setAnimationLoop(() => {
+      const delta = clock.getDelta();
+
+      if (mixer) mixer.update(delta);
+
+      // 👉 Copia o tracking do anchor com suavização
+      smoothPosition.lerp(anchor.group.position, smoothingFactor);
+      smoothQuaternion.slerp(anchor.group.quaternion, smoothingFactor);
+
+      // 👉 Aplica SOMENTE no conteúdo
+      contentGroup.position.copy(smoothPosition);
+      contentGroup.quaternion.copy(smoothQuaternion);
+
+      renderer.render(scene, camera);
+    });
+
+    // ✅ Remove o botão
+    startButton.classList.add("hidden");
+    console.log("✅ AR iniciado com sucesso");
+  } catch (error) {
+    console.error("❌ Erro ao iniciar AR:", error);
+    alert("Erro ao iniciar a experiência AR. Por favor, recarregue a página.");
+  }
+});
+
+// =======================
 // Suavização correta
 // =======================
 const smoothPosition = new THREE.Vector3();
 const smoothQuaternion = new THREE.Quaternion();
 const smoothingFactor = 0.15; // quanto menor, mais suave
-
-await mindarThree.start();
-
-renderer.setAnimationLoop(() => {
-  const delta = clock.getDelta();
-
-  if (mixer) mixer.update(delta);
-
-  // 👉 Copia o tracking do anchor com suavização
-  smoothPosition.lerp(anchor.group.position, smoothingFactor);
-  smoothQuaternion.slerp(anchor.group.quaternion, smoothingFactor);
-
-  // 👉 Aplica SOMENTE no conteúdo
-  contentGroup.position.copy(smoothPosition);
-  contentGroup.quaternion.copy(smoothQuaternion);
-
-  renderer.render(scene, camera);
-});

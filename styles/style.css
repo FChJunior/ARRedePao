@@ -30,5 +30,38 @@ html, body {
   top: 0;
   left: 0;
   z-index: 1;
-} 
+}
+
+/* Botão de iniciar AR */
+#start-button {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 20px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: blue;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+#start-button:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+#start-button:active {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+
+#start-button.hidden {
+  display: none;
+}
 
