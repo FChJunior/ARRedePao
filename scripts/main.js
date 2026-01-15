@@ -2,9 +2,9 @@ import * as THREE from "three";
 import { MindARThree } from "mindar-image-three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-document.body.style.margin = "0";
-document.body.style.width = "100%";
-document.body.style.height = "100%";
+// document.body.style.margin = "0";
+// document.body.style.width = "100%";
+// document.body.style.height = "100%";
 
 // =======================
 // MindAR setup
