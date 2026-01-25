@@ -7,6 +7,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 // =======================
 const startButton = document.getElementById("start-button");
 let arStarted = false;
+let firstTargetDetection = true; // Flag para primeira detecção do target
 
 // =======================
 // MindAR setup
@@ -42,7 +43,6 @@ const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 let mixer;
 let animationActions = [];
-let animationClip; // 🎬 Guarda o clip para detectar loop
 
 loader.load(
   "./assets/masterAnimationPadeirinho.glb",
@@ -60,7 +60,6 @@ loader.load(
     if (gltf.animations.length > 0) {
       mixer = new THREE.AnimationMixer(model);
       gltf.animations.forEach((clip) => {
-        animationClip = clip; // Guarda referência do clip
         const action = mixer.clipAction(clip);
         action.play();
         action.paused = true; // 🎬 Começa pausado
@@ -70,11 +69,18 @@ loader.load(
       // 🔁 Escuta quando animação faz loop
       mixer.addEventListener("loop", () => {
         console.log("🔁 Animação fez loop");
-        // Reinicia áudio do início
-        audio.currentTime = 0;
-        audio.play().catch((err) => {
-          console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
+        // Reinicia áudio do paderin do início
+        audioPaderin.currentTime = 0;
+        audioPaderin.play().catch((err) => {
+          console.warn("⚠️ Áudio paderin não pôde ser reproduzido:", err);
         });
+        // Reinicia áudio dos efeitos com 2 segundos de atraso
+        audioEfeitos.currentTime = 2;
+        audioEfeitos.play().catch((err) => {
+          console.warn("⚠️ Áudio efeitos não pôde ser reproduzido:", err);
+        });
+        // Marca para próxima detecção continuar de onde parou
+        firstTargetDetection = false;
       });
     }
 
@@ -87,10 +93,13 @@ loader.load(
 );
 
 // =======================
-// Áudio
+// Áudios
 // =======================
-const audio = new Audio("./audios/paderin.mp3");
-audio.loop = false; // ❌ Sem loop no áudio
+const audioPaderin = new Audio("./audios/paderin.mp3");
+audioPaderin.loop = false; // ❌ Sem loop no áudio
+
+const audioEfeitos = new Audio("./audios/efeitos.mp3");
+audioEfeitos.loop = false; // ❌ Sem loop no áudio (sincroniza com animação)
 
 // =======================
 // Debug de target
@@ -103,10 +112,20 @@ anchor.onTargetFound = () => {
     action.paused = false;
   });
 
-  // ▶️ Toca áudio (só se AR já foi iniciado)
+  // ▶️ Toca ambos os áudios (só se AR já foi iniciado)
   if (arStarted) {
-    audio.play().catch((err) => {
-      console.warn("⚠️ Áudio não pôde ser reproduzido:", err);
+    audioPaderin.play().catch((err) => {
+      console.warn("⚠️ Áudio paderin não pôde ser reproduzido:", err);
+    });
+
+    // Na primeira vez, começa em 2s. Depois, continua de onde parou
+    if (firstTargetDetection) {
+      audioEfeitos.currentTime = 2;
+      firstTargetDetection = false;
+    }
+
+    audioEfeitos.play().catch((err) => {
+      console.warn("⚠️ Áudio efeitos não pôde ser reproduzido:", err);
     });
   }
 };
@@ -119,8 +138,9 @@ anchor.onTargetLost = () => {
     action.paused = true;
   });
 
-  // ⏸️ Pausa áudio
-  audio.pause();
+  // ⏸️ Pausa ambos os áudios
+  audioPaderin.pause();
+  audioEfeitos.pause();
 };
 
 // =======================
@@ -128,10 +148,14 @@ anchor.onTargetLost = () => {
 // =======================
 startButton.addEventListener("click", async () => {
   try {
-    // 🔓 Desbloqueia áudio (importante para iOS)
-    await audio.play();
-    audio.pause();
-    audio.currentTime = 0;
+    // 🔓 Desbloqueia ambos os áudios (importante para iOS)
+    await audioPaderin.play();
+    audioPaderin.pause();
+    audioPaderin.currentTime = 0;
+
+    await audioEfeitos.play();
+    audioEfeitos.pause();
+    audioEfeitos.currentTime = 0;
 
     // 🚀 Inicia o MindAR
     await mindarThree.start();
