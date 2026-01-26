@@ -70,3 +70,55 @@ html, body {
   display: none;
 }
 
+/* Controles AR */
+#ar-controls {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#ar-controls.hidden {
+  display: none;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.control-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.1);
+}
+
+.control-btn:active {
+  background: #1e40af;
+  transform: scale(0.95);
+}
+

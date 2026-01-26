@@ -10,6 +10,19 @@ let arStarted = false;
 let firstTargetDetection = true; // Flag para primeira detecção do target
 
 // =======================
+// Controles AR
+// =======================
+const arControls = document.getElementById("ar-controls");
+const rotateLeftBtn = document.getElementById("rotate-left");
+const rotateRightBtn = document.getElementById("rotate-right");
+const zoomInBtn = document.getElementById("zoom-in");
+const zoomOutBtn = document.getElementById("zoom-out");
+
+// Variáveis de controle
+let modelRotation = 0; // Rotação adicional do modelo
+let modelScale = 4; // Escala inicial do modelo
+
+// =======================
 // MindAR setup
 // =======================
 const mindarThree = new MindARThree({
@@ -43,11 +56,12 @@ const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 let mixer;
 let animationActions = [];
+let model; // Referência global do modelo
 
 loader.load(
   "./assets/masterAnimationPadeirinho.glb",
   (gltf) => {
-    const model = gltf.scene;
+    model = gltf.scene;
     model.scale.set(4, 4, 4);
     model.position.set(0, -0.1, 0);
     model.rotation.x = 0.9;
@@ -178,12 +192,51 @@ startButton.addEventListener("click", async () => {
       renderer.render(scene, camera);
     });
 
-    // ✅ Remove o botão
+    // ✅ Remove o botão e mostra controles
     startButton.classList.add("hidden");
+    arControls.classList.remove("hidden");
     console.log("✅ AR iniciado com sucesso");
   } catch (error) {
     console.error("❌ Erro ao iniciar AR:", error);
     alert("Erro ao iniciar a experiência AR. Por favor, recarregue a página.");
+  }
+});
+
+// =======================
+// Event Listeners dos Controles
+// =======================
+
+// Rotação para esquerda
+rotateLeftBtn.addEventListener("click", () => {
+  if (model) {
+    modelRotation -= Math.PI / 4; // Rotaciona 45 graus
+    model.rotation.x = 0.9 + modelRotation; // Mantém rotação inicial + adicional
+  }
+});
+
+// Rotação para direita
+rotateRightBtn.addEventListener("click", () => {
+  if (model) {
+    modelRotation += Math.PI / 4; // Rotaciona 45 graus
+    model.rotation.x = 0.9 + modelRotation; // Mantém rotação inicial + adicional
+  }
+});
+
+// Zoom In
+zoomInBtn.addEventListener("click", () => {
+  if (model) {
+    modelScale += 0.5;
+    if (modelScale > 8) modelScale = 8; // Limite máximo
+    model.scale.set(modelScale, modelScale, modelScale);
+  }
+});
+
+// Zoom Out
+zoomOutBtn.addEventListener("click", () => {
+  if (model) {
+    modelScale -= 0.5;
+    if (modelScale < 2) modelScale = 2; // Limite mínimo
+    model.scale.set(modelScale, modelScale, modelScale);
   }
 });
 
