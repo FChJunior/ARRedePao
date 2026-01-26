@@ -74,14 +74,15 @@ html, body {
 #ar-controls {
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   z-index: 1000;
   display: flex;
   flex-direction: row;
   gap: 15px;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 #ar-controls.hidden {
