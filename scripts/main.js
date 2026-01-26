@@ -13,13 +13,16 @@ let firstTargetDetection = true; // Flag para primeira detecção do target
 // Controles AR
 // =======================
 const arControls = document.getElementById("ar-controls");
-const rotateLeftBtn = document.getElementById("rotate-left");
-const rotateRightBtn = document.getElementById("rotate-right");
+const rotateXUpBtn = document.getElementById("rotate-x-up");
+const rotateXDownBtn = document.getElementById("rotate-x-down");
+const rotateYLeftBtn = document.getElementById("rotate-y-left");
+const rotateYRightBtn = document.getElementById("rotate-y-right");
 const zoomInBtn = document.getElementById("zoom-in");
 const zoomOutBtn = document.getElementById("zoom-out");
 
 // Variáveis de controle
-let modelRotation = 0; // Rotação adicional do modelo
+let modelRotationX = 0; // Rotação adicional no eixo X
+let modelRotationY = 0; // Rotação adicional no eixo Y
 let modelScale = 4; // Escala inicial do modelo
 
 // =======================
@@ -206,19 +209,35 @@ startButton.addEventListener("click", async () => {
 // Event Listeners dos Controles
 // =======================
 
-// Rotação para esquerda
-rotateLeftBtn.addEventListener("click", () => {
+// Rotação X para cima (↑)
+rotateXUpBtn.addEventListener("click", () => {
   if (model) {
-    modelRotation -= Math.PI / 4; // Rotaciona 45 graus
-    model.rotation.x = 0.9 + modelRotation; // Mantém rotação inicial + adicional
+    modelRotationX -= Math.PI / 4; // Rotaciona 45 graus para cima
+    model.rotation.x = 0.9 + modelRotationX; // Mantém rotação inicial + adicional
   }
 });
 
-// Rotação para direita
-rotateRightBtn.addEventListener("click", () => {
+// Rotação X para baixo (↓)
+rotateXDownBtn.addEventListener("click", () => {
   if (model) {
-    modelRotation += Math.PI / 4; // Rotaciona 45 graus
-    model.rotation.x = 0.9 + modelRotation; // Mantém rotação inicial + adicional
+    modelRotationX += Math.PI / 4; // Rotaciona 45 graus para baixo
+    model.rotation.x = 0.9 + modelRotationX; // Mantém rotação inicial + adicional
+  }
+});
+
+// Rotação Y para esquerda (←)
+rotateYLeftBtn.addEventListener("click", () => {
+  if (model) {
+    modelRotationY -= Math.PI / 4; // Rotaciona 45 graus para esquerda
+    model.rotation.y = modelRotationY;
+  }
+});
+
+// Rotação Y para direita (→)
+rotateYRightBtn.addEventListener("click", () => {
+  if (model) {
+    modelRotationY += Math.PI / 4; // Rotaciona 45 graus para direita
+    model.rotation.y = modelRotationY;
   }
 });
 
